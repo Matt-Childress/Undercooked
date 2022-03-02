@@ -8,7 +8,7 @@ public class GameManager : MonoBehaviour
     public static GameManager instance;
 
     //hold the vegetable table objects
-    public VegetableTable[] vegetables;
+    public VegetableTable[] vegetableTables;
 
     // Start is called before the first frame update
     void Start()
@@ -17,21 +17,21 @@ public class GameManager : MonoBehaviour
         instance = this;
 
         //this statement handles the case that vegetables are not defined in the editor
-        if (vegetables.Length < 1 || vegetables == null)
+        if (vegetableTables.Length < 1 || vegetableTables == null)
         {
-            vegetables = FindObjectsOfType<VegetableTable>();
+            vegetableTables = FindObjectsOfType<VegetableTable>();
         }
 
         //here, make a string array of vegetable names and randomly assign the names types for a different placement each game
-        string[] vegeEnumList = System.Enum.GetNames(typeof(VegetableType));
-        if (vegetables.Length == vegeEnumList.Length) //error checking if the number of defined vegetable tables and vegetable enum types are the same
+        string[] vegeTypeList = System.Enum.GetNames(typeof(VegetableType));
+        if (vegetableTables.Length == vegeTypeList.Length) //error checking if the number of defined vegetable tables and vegetable enum types are the same
         {
-            for (int i = 0; i < vegeEnumList.Length; i++)//shuffle the list for a random placement of vegetables each game
+            for (int i = 0; i < vegeTypeList.Length; i++)//shuffle the list for a random placement of vegetables each game
             {
-                string temp = vegeEnumList[i];
-                int randomIndex = Random.Range(i, vegeEnumList.Length);
-                vegetables[i].AssignVegetable(vegeEnumList[randomIndex]);
-                vegeEnumList[randomIndex] = temp;
+                string temp = vegeTypeList[i];
+                int randomIndex = Random.Range(i, vegeTypeList.Length);
+                vegetableTables[i].AssignVegetable(vegeTypeList[randomIndex]);
+                vegeTypeList[randomIndex] = temp;
             }
         }
         else
