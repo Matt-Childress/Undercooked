@@ -8,7 +8,7 @@ public class Player : MonoBehaviour
 
     //hold the player's currently highlighted vegeTable
     [HideInInspector]
-    public Vegetable highlightedVegetable;
+    public VegetableTable highlightedVegetable;
 
     // Start is called before the first frame update
     void Start()

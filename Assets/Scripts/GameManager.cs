@@ -8,7 +8,7 @@ public class GameManager : MonoBehaviour
     public static GameManager instance;
 
     //hold the vegetable table objects
-    public Vegetable[] vegetables;
+    public VegetableTable[] vegetables;
 
     // Start is called before the first frame update
     void Start()
@@ -19,11 +19,11 @@ public class GameManager : MonoBehaviour
         //this statement handles the case that vegetables are not defined in the editor
         if (vegetables.Length < 1 || vegetables == null)
         {
-            vegetables = FindObjectsOfType<Vegetable>();
+            vegetables = FindObjectsOfType<VegetableTable>();
         }
 
         //here, make a string array of vegetable names and randomly assign the names types for a different placement each game
-        string[] vegeEnumList = System.Enum.GetNames(typeof(Vegetables));
+        string[] vegeEnumList = System.Enum.GetNames(typeof(VegetableType));
         if (vegetables.Length == vegeEnumList.Length) //error checking if the number of defined vegetable tables and vegetable enum types are the same
         {
             for (int i = 0; i < vegeEnumList.Length; i++)//shuffle the list for a random placement of vegetables each game

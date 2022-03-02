@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Vegetable : MonoBehaviour
+public class VegetableTable : MonoBehaviour
 {
     public Text label;
 
     private Image tableImage;
-    private Vegetables type;
+    private VegetableType type;
 
     private Color litTableColor = Color.white;
     private Color dimTableColor;
@@ -32,7 +32,7 @@ public class Vegetable : MonoBehaviour
     //vegetable method to assign vegetables type and label
     public void AssignVegetable(string vege)
     {
-        type = (Vegetables)System.Enum.Parse(typeof(Vegetables), vege);
+        type = (VegetableType)System.Enum.Parse(typeof(VegetableType), vege);
         label.text = vege;
     }
 

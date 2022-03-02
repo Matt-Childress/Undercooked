@@ -1,4 +1,4 @@
-﻿public enum Vegetables //this enum stores the types of vegetables in the game for easy or random assignment
+﻿public enum VegetableType //this enum stores the types of vegetables in the game for easy or random assignment
 {
     Carrot = 0,
     Celery = 1,
