@@ -14,9 +14,7 @@ public class Player : MonoBehaviour
 
     //hold the player's currently highlighted vegeTable and chopBlocks
     [HideInInspector]
-    public VegetableTable highlightedVegetable;
-    [HideInInspector]
-    public ChoppingBlock highlightedChopBlock;
+    public Selectable highlightedSelectable;
 
     //the player's held vegetables
     [HideInInspector]
@@ -61,23 +59,25 @@ public class Player : MonoBehaviour
     //method for deciding on which action to perform, if any
     public void PerformAction()
     {
-        //this if statement looks at situations like if a player is targetting a vegetable or cutting board, and decides with a priority which to perform
-
-        if(highlightedVegetable) //picking up vegetables from tables
+        if (highlightedSelectable) // if the player is currently selecting something
         {
-            if(heldVegetable1 == 0)
+            if (highlightedSelectable is VegetableTable) //if the highlighted selectable is a vegetable table
             {
-                heldVegetable1 = highlightedVegetable.type;
-                UpdateHeldVegetableUI();
-            }
-            else if(heldVegetable2 == 0)
-            {
-                heldVegetable2 = highlightedVegetable.type;
-                UpdateHeldVegetableUI();
-            }
-            else
-            {
-                Debug.Log("Hands are full, can't pick up a 3rd Vegetable");
+                VegetableTable vegetable = highlightedSelectable as VegetableTable; //make a temporary vegetableTable variable with access to the vegetable attributes
+                if (heldVegetable1 == 0)
+                {
+                    heldVegetable1 = vegetable.type;
+                    UpdateHeldVegetableUI();
+                }
+                else if (heldVegetable2 == 0)
+                {
+                    heldVegetable2 = vegetable.type;
+                    UpdateHeldVegetableUI();
+                }
+                else
+                {
+                    Debug.Log("Hands are full, can't pick up a 3rd Vegetable");
+                }
             }
         }
     }
