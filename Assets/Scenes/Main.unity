@@ -992,7 +992,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6b47772e1ec7c84785303302bb4813e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  vegetables:
+  vegetableTables:
   - {fileID: 150567529}
   - {fileID: 245147271}
   - {fileID: 1004163942}
