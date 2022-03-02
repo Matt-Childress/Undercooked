@@ -21,8 +21,8 @@ public class Player : MonoBehaviour
     //player movement method
     public void Move(float hIn, float vIn)
     {
-        //make a Vector3 with horizontal along the x axis and vertical along the z axis (translated for a top-down view)
-        Vector3 direction = new Vector3(hIn, 0, vIn);
+        //make a Vector2 with the movement input parameters
+        Vector3 direction = new Vector2(hIn, vIn);
 
         //update the player object's position with respect to the Vector3 direction and the player's speed
         transform.position += direction * speed;
