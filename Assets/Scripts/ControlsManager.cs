@@ -29,7 +29,7 @@ public class ControlsManager : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         //listen for movement key input, and send to the appropriate player movement method
         HandleMovement();
