@@ -1285,6 +1285,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 0.3
   highlightedVegetable: {fileID: 0}
+  heldVegetable1: 0
+  heldVegetable2: 0
 --- !u!50 &1109106180
 Rigidbody2D:
   serializedVersion: 4
@@ -1850,6 +1852,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 0.3
   highlightedVegetable: {fileID: 0}
+  heldVegetable1: 0
+  heldVegetable2: 0
 --- !u!50 &1598393777
 Rigidbody2D:
   serializedVersion: 4

@@ -8,7 +8,7 @@ public class VegetableTable : MonoBehaviour
     public Text label;
 
     private Image tableImage;
-    private VegetableType type;
+    public VegetableType type;
 
     private Color litTableColor = Color.white;
     private Color dimTableColor;

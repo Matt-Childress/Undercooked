@@ -29,12 +29,17 @@ public class ControlsManager : MonoBehaviour
     }
 
     // Update is called once per frame
+    private void Update()
+    {
+        //listen for action key input, and handle appropriately
+        HandleActions();
+    }
+
+    //using FixedUpdate for Movement since there are physics calculations on collisions
     void FixedUpdate()
     {
         //listen for movement key input, and send to the appropriate player movement method
         HandleMovement();
-        //listen for action key input, and handle appropriately
-        //HandleAction();
     }
 
     private void HandleMovement()
@@ -53,6 +58,20 @@ public class ControlsManager : MonoBehaviour
         if (p2H != 0f || p2V != 0f)
         {
             player2.Move(p2H, p2V); //if horizontal or vertical keys are pressed, call the player2 movement method
+        }
+    }
+
+    private void HandleActions()
+    {
+        //if an action key is pressed, call the player method for deciding which action to take
+        if(Input.GetButtonDown("P1Action"))
+        {
+            player1.PerformAction();
+        }
+        
+        if(Input.GetButtonDown("P2Action"))
+        {
+            player2.PerformAction();
         }
     }
 }

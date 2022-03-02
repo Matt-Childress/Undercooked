@@ -24,13 +24,13 @@ public class GameManager : MonoBehaviour
 
         //here, make a string array of vegetable names and randomly assign the names types for a different placement each game
         string[] vegeTypeList = System.Enum.GetNames(typeof(VegetableType));
-        if (vegetableTables.Length == vegeTypeList.Length) //error checking if the number of defined vegetable tables and vegetable enum types are the same
+        if (vegetableTables.Length == vegeTypeList.Length - 1) //error checking if the number of defined vegetable tables and vegetable enum types are the same
         {
-            for (int i = 0; i < vegeTypeList.Length; i++)//shuffle the list for a random placement of vegetables each game
+            for (int i = 1; i < vegeTypeList.Length; i++)//shuffle the list for a random placement of vegetables each game
             {
                 string temp = vegeTypeList[i];
                 int randomIndex = Random.Range(i, vegeTypeList.Length);
-                vegetableTables[i].AssignVegetable(vegeTypeList[randomIndex]);
+                vegetableTables[i - 1].AssignVegetable(vegeTypeList[randomIndex]);
                 vegeTypeList[randomIndex] = temp;
             }
         }
