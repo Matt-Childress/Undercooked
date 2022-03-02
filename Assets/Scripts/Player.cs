@@ -6,6 +6,10 @@ public class Player : MonoBehaviour
 {
     public float speed = 1;
 
+    //hold the player's currently highlighted vegeTable
+    [HideInInspector]
+    public Vegetable highlightedVegetable;
+
     // Start is called before the first frame update
     void Start()
     {

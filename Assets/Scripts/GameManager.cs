@@ -4,12 +4,18 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    //hold instance of GameManager for other objects to access
+    public static GameManager instance;
+
     //hold the vegetable table objects
     public Vegetable[] vegetables;
 
     // Start is called before the first frame update
     void Start()
     {
+        //assign the gamemanager instance on start
+        instance = this;
+
         //this statement handles the case that vegetables are not defined in the editor
         if (vegetables.Length < 1 || vegetables == null)
         {
