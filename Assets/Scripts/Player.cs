@@ -61,6 +61,9 @@ public class Player : MonoBehaviour
 
         //start time countdown
         StartCoroutine(Countdown());
+
+        //initialize score
+        AdjustScore(0);
     }
 
     //player movement method
@@ -134,10 +137,12 @@ public class Player : MonoBehaviour
                 if(heldSalad1 != null && heldSalad1.isFinished)
                 {
                     DropSalad(heldSalad1);
+                    AdjustScore(10);
                 }
                 else if (heldSalad2 != null && heldSalad2.isFinished)
                 {
                     DropSalad(heldSalad2);
+                    AdjustScore(10);
                 }
             }
             else if (highlightedSelectable is TrashCan)
@@ -146,10 +151,12 @@ public class Player : MonoBehaviour
                 if (heldSalad1 != null && heldSalad1.isFinished)
                 {
                     DropSalad(heldSalad1);
+                    AdjustScore(-5);
                 }
                 else if (heldSalad2 != null && heldSalad2.isFinished)
                 {
                     DropSalad(heldSalad2);
+                    AdjustScore(-5);
                 }
             }
             else if (highlightedSelectable is Plate)
@@ -227,6 +234,12 @@ public class Player : MonoBehaviour
 
         //update held vege UI
         UpdateHeldSaladUI();
+    }
+
+    public void AdjustScore(int adjustment)
+    {
+        score += adjustment;
+        scoreText.text = score.ToString();
     }
 
     private IEnumerator Countdown()
