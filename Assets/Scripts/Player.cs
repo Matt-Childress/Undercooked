@@ -103,6 +103,17 @@ public class Player : MonoBehaviour
                     chopBlock.StartChop(this, heldSalad2);
                 }
             }
+            else if(highlightedSelectable is Customer)
+            {
+                if(heldSalad1 != null && heldSalad1.isFinished)
+                {
+                    DropSalad(heldSalad1);
+                }
+                else if (heldSalad2 != null && heldSalad2.isFinished)
+                {
+                    DropSalad(heldSalad2);
+                }
+            }
         }
     }
 
