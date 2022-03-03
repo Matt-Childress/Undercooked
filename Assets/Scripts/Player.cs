@@ -105,6 +105,7 @@ public class Player : MonoBehaviour
             }
             else if(highlightedSelectable is Customer)
             {
+                //can only hand finished salads to customers
                 if(heldSalad1 != null && heldSalad1.isFinished)
                 {
                     DropSalad(heldSalad1);
