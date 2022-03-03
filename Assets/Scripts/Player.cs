@@ -256,6 +256,6 @@ public class Player : MonoBehaviour
             timeText.text = timeLeft.ToString();
         }
 
-        gm.PlayerTimedOut(); //when a player times out, check if the game needs to end
+        gm.PlayerTimedOut(this); //when a player times out, check if the game needs to end
     }
 }

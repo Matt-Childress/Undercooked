@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -10,6 +12,10 @@ public class GameManager : MonoBehaviour
     //hold player objects
     public Player player1;
     public Player player2;
+
+    //hold game over ui variables
+    public GameObject gameOverPanel;
+    public Text winnerText;
 
     //hold the vegetable table objects
     public VegetableTable[] vegetableTables;
@@ -61,13 +67,43 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void PlayerTimedOut()
+    public void PlayerTimedOut(Player player)
     {
+        //lock player movement and actions, disable the player object, and deselect any selectables it has selected
+        player.HandlePlayerLock(true);
+        player.gameObject.SetActive(false);
+        if(player.highlightedSelectable)
+        {
+            player.highlightedSelectable.Deselect(player);
+        }
+
         //if both players are out of time, end the game
         if(player1.timeLeft <= 0 && player2.timeLeft <= 0)
         {
+            //set winner text
+            string winnerMessage = string.Empty;
+            if (player1.score == player2.score)
+            {
+                winnerMessage = "Tie!";
+            }
+            else if(player1.score > player2.score)
+            {
+                winnerMessage = "Player 1 Wins!";
+            }
+            else
+            {
+                winnerMessage = "Player 2 Wins!";
+            }
+            winnerText.text = winnerMessage;
+
             //end game ui popup
-            Debug.Log("Game Over");
+            gameOverPanel.SetActive(true);
         }
+    }
+
+    public void ResetGame()
+    {
+        //since we are only using 1 scene, just load the scene at build index 0
+        SceneManager.LoadScene(0);
     }
 }
