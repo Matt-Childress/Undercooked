@@ -20,12 +20,6 @@ public class Selectable : MonoBehaviour
         dimColor = selectableImage.color;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     public void Select(Player player)
     {
         //light up the selectable

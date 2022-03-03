@@ -39,10 +39,4 @@ public class GameManager : MonoBehaviour
             Debug.LogError("Number of Vegetables and Number of Vegetable enum values differs");
         }
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }
