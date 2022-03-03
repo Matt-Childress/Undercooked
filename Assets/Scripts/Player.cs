@@ -82,6 +82,15 @@ public class Player : MonoBehaviour
                     chopBlock.RemoveSalad();
                 }
             }
+            else if (highlightedSelectable is Plate) //if selecting a plate
+            {
+                Plate plate = highlightedSelectable as Plate; //variable with access to plate attributes
+                if (plate.heldVege != null && PickupSalad(plate.heldVege)) //try to pick up vegetable from plate
+                {
+                    //remove vegetable from the plate if it was successfully picked up
+                    plate.RemoveSalad();
+                }
+            }
         }
     }
 
@@ -124,6 +133,21 @@ public class Player : MonoBehaviour
                 }
                 else if (heldSalad2 != null && heldSalad2.isFinished)
                 {
+                    DropSalad(heldSalad2);
+                }
+            }
+            else if (highlightedSelectable is Plate)
+            {
+                Plate plate = highlightedSelectable as Plate; //variable with access to plate attributes
+
+                if(heldSalad1 != null && plate.ValidVegetable(heldSalad1))
+                {
+                    plate.HoldVegetable(heldSalad1);
+                    DropSalad(heldSalad1);
+                }
+                else if(heldSalad2 != null && plate.ValidVegetable(heldSalad2))
+                {
+                    plate.HoldVegetable(heldSalad2);
                     DropSalad(heldSalad2);
                 }
             }
