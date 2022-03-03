@@ -5,53 +5,80 @@ using UnityEngine.UI;
 
 public class ChoppingBlock : Selectable
 {
-    //time it takes to chop a vegetable
+    //time it takes to chop
     public float choppingWaitTime = 3f;
 
-    //text to display the vegetable being chopped
+    //text to display the salad combination being chopped
     public Text chopText;
 
-    public void StartChop(Player player, Vegetable vege)
+    //hold the current salad combination
+    public Salad heldSalad;
+
+    public bool ValidChop(Salad saladBeingPlaced)
+    {
+        //check if a salad can be placed on a chopping block or not
+        if(saladBeingPlaced != null)
+        {
+            if(heldSalad != null || saladBeingPlaced.newVegetable) //valid if the salad is being combined into an existing salad, or it is a new vegetable
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public void StartChop(Player player, Salad salad)
     {
         //lock the player
         player.HandlePlayerLock(true);
 
-        //drop the first vegetable (passing it to the chop block)
-        player.DropVegetable(vege);
+        //drop the first salad (passing it to the chop block)
+        player.DropSalad(salad);
 
-        //method starts a Coroutine to display vegetable is chopping
-        StartCoroutine(ChoppingRoutine(player, vege));
+        //method starts a Coroutine to display the salad is chopping
+        StartCoroutine(ChoppingRoutine(player, salad.vegetableCombination));
     }
 
-    private IEnumerator ChoppingRoutine(Player player, Vegetable vege)
+    private IEnumerator ChoppingRoutine(Player player, List<VegetableType> newIngredients)
     {
         float timer = 0f; //timer to check when the chopping loop should exit
         float timeStep = 0.25f; //how often loop restarts to update chopText
 
+        //combine the new ingredients with the current held salad combination if there is one, or create a new held salad
+        if (heldSalad != null)
+        {
+            heldSalad.CombineIntoSalad(newIngredients);
+        }
+        else
+        {
+            heldSalad = new Salad(newIngredients, false);
+        }
+
         //make 4 strings with an additional period on each one, to cycle through and let the player know a process is happening
-        string originVegeText = vege.type.ToString() + "\n"; //put the elipses on a new line
-        string vegeText1 = originVegeText + ".";
-        string vegeText2 = vegeText1 + ".";
-        string vegeText3 = vegeText2 + ".";
+        string saladText0 = heldSalad.GetSaladText() + "\n"; //put the elipses on a new line
+        string saladText1 = saladText0 + ".";
+        string saladText2 = saladText1 + ".";
+        string saladText3 = saladText2 + ".";
 
         //while the player is chopping, update the text
         while (timer < choppingWaitTime)
         {
-            if (chopText.text.Equals(originVegeText))
+            if (chopText.text.Equals(saladText0))
             {
-                chopText.text = vegeText1;
+                chopText.text = saladText1;
             }
-            else if (chopText.text.Equals(vegeText1))
+            else if (chopText.text.Equals(saladText1))
             {
-                chopText.text = vegeText2;
+                chopText.text = saladText2;
             }
-            else if (chopText.text.Equals(vegeText2))
+            else if (chopText.text.Equals(saladText2))
             {
-                chopText.text = vegeText3;
+                chopText.text = saladText3;
             }
             else
             {
-                chopText.text = originVegeText;
+                chopText.text = saladText0;
             }
 
             yield return new WaitForSeconds(timeStep);
@@ -59,18 +86,21 @@ public class ChoppingBlock : Selectable
         }
 
         //perform finished chopping actions
-        EndChop(player, vege.type);
+        EndChop(player);
     }
 
-    private void EndChop(Player player, VegetableType vType)
+    private void EndChop(Player player)
     {
-        //clear the chopping block's text label
-        chopText.text = string.Empty;
-
-        //player should pickup the new chopped vegetable
-        player.PickupVegetable(vType, true);
+        //display correct chopped salad text
+        UpdateHeldSaladUI();
 
         //unlock the player
         player.HandlePlayerLock(false);
+    }
+
+    private void UpdateHeldSaladUI()
+    {
+        //updating chopBlock's label
+        chopText.text = heldSalad != null ? heldSalad.GetSaladText() : string.Empty;
     }
 }

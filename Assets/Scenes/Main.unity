@@ -1601,11 +1601,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 0.3
-  heldVegetable1Text: {fileID: 1918251014}
-  heldVegetable2Text: {fileID: 1614688019}
+  heldSalad1Text: {fileID: 0}
+  heldSalad2Text: {fileID: 0}
   highlightedSelectable: {fileID: 0}
-  heldVegetable1: 0
-  heldVegetable2: 0
 --- !u!50 &1109106180
 Rigidbody2D:
   serializedVersion: 4
@@ -2443,11 +2441,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 0.3
-  heldVegetable1Text: {fileID: 1544004695}
-  heldVegetable2Text: {fileID: 147836824}
+  heldSalad1Text: {fileID: 0}
+  heldSalad2Text: {fileID: 0}
   highlightedSelectable: {fileID: 0}
-  heldVegetable1: 0
-  heldVegetable2: 0
 --- !u!50 &1598393777
 Rigidbody2D:
   serializedVersion: 4

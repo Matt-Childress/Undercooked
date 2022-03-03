@@ -9,8 +9,8 @@ public class Player : MonoBehaviour
     public float speed = 1;
 
     //text fields above the player that display what vegetables are picked up
-    public Text heldVegetable1Text;
-    public Text heldVegetable2Text;
+    public Text heldSalad1Text;
+    public Text heldSalad2Text;
 
     //hold the player's currently highlighted vegeTable and chopBlocks
     [HideInInspector]
@@ -18,9 +18,9 @@ public class Player : MonoBehaviour
 
     //the player's held vegetables
     [HideInInspector]
-    public Vegetable heldVegetable1;
+    public Salad heldSalad1;
     [HideInInspector]
-    public Vegetable heldVegetable2;
+    public Salad heldSalad2;
 
     private bool isChopping;
 
@@ -30,16 +30,16 @@ public class Player : MonoBehaviour
     void Start()
     {
         //handling if heldVegetableTexts are undefined on start
-        if(!heldVegetable1Text || !heldVegetable2Text)
+        if(!heldSalad1Text || !heldSalad2Text)
         {
             Text[] vegeTexts = GetComponentsInChildren<Text>();
-            if(!heldVegetable1Text)
+            if(!heldSalad1Text)
             {
-                heldVegetable1Text = vegeTexts[0];
+                heldSalad1Text = vegeTexts[0];
             }
-            if(!heldVegetable2Text)
+            if(!heldSalad2Text)
             {
-                heldVegetable2Text = vegeTexts[1];
+                heldSalad2Text = vegeTexts[1];
             }
         }
 
@@ -68,29 +68,31 @@ public class Player : MonoBehaviour
             if (highlightedSelectable is VegetableTable) //if the highlighted selectable is a vegetable table
             {
                 VegetableTable vTable = highlightedSelectable as VegetableTable; //make a temporary vegetableTable variable with access to the vegetable attributes
-                PickupVegetable(vTable.type);                
+                List<VegetableType> newVege = new List<VegetableType>();
+                newVege.Add(vTable.type); //add the vegetable to a new list for initialization as a new salad
+                PickupSalad(newVege, true);                
             }
             else if(highlightedSelectable is ChoppingBlock)
             {
                 ChoppingBlock chopBlock = highlightedSelectable as ChoppingBlock; //temporary variable with access to chopping block attributes
 
-                if(heldVegetable1 != null && !heldVegetable1.isChopped) //if the player is holding a vegetable that isn't already chopped, chop it
+                if(chopBlock.ValidChop(heldSalad1)) //if a held salad can be chopped
                 {
-                    chopBlock.StartChop(this, heldVegetable1);
+                    chopBlock.StartChop(this, heldSalad1); //chop method
                 }
-                else if(heldVegetable2 != null && !heldVegetable2.isChopped)
+                else if(chopBlock.ValidChop(heldSalad2)) //handling dropping from slot 2
                 {
-                    chopBlock.StartChop(this, heldVegetable2); //handling dropping from slot 2
+                    chopBlock.StartChop(this, heldSalad2); 
                 }
             }
         }
     }
 
-    private void UpdateHeldVegetableUI()
+    private void UpdateHeldSaladUI()
     {
-        //set text field above the player to the correct held vegetables, or empty if no vegetable is held in that slot
-        heldVegetable1Text.text = heldVegetable1 != null ? heldVegetable1.GetVegetableText() : string.Empty;
-        heldVegetable2Text.text = heldVegetable2 != null ? heldVegetable2.GetVegetableText() : string.Empty;
+        //set text field above the player to the correct held salads, or empty if no salad is held in that slot
+        heldSalad1Text.text = heldSalad1 != null ? heldSalad1.GetSaladText() : string.Empty;
+        heldSalad2Text.text = heldSalad2 != null ? heldSalad2.GetSaladText() : string.Empty;
     }
 
     public void HandlePlayerLock(bool locking)
@@ -100,43 +102,43 @@ public class Player : MonoBehaviour
         rb.bodyType = locking ? RigidbodyType2D.Kinematic : RigidbodyType2D.Dynamic;
     }
 
-    public void PickupVegetable(VegetableType vType, bool chopped = false)
+    public void PickupSalad(List<VegetableType> typeCombo, bool newVegetable)
     {
-        //create a vegetable object and slot it to the correct hand
-        if (heldVegetable1 == null)
+        //create a salad object and slot it to the correct hand
+        if (heldSalad1 == null)
         {
-            heldVegetable1 = new Vegetable(vType, chopped);
+            heldSalad1 = new Salad(typeCombo, newVegetable);
         }
-        else if (heldVegetable2 == null)
+        else if (heldSalad2 == null)
         {
-            heldVegetable2 = new Vegetable(vType, chopped);
+            heldSalad2 = new Salad(typeCombo, newVegetable);
         }
 
-        //update the held vege UI texts
-        UpdateHeldVegetableUI();
+        //update the held salad UI texts
+        UpdateHeldSaladUI();
     }
 
-    public void DropVegetable(Vegetable vege)
+    public void DropSalad(Salad salad)
     {
-        //handle when a player puts a vegetable down
-        if(heldVegetable1 != null && heldVegetable1 == vege)
+        //handle when a player puts a salad down
+        if(heldSalad1 != null && heldSalad1 == salad)
         {
-            if(heldVegetable2 != null) //if there is a 2nd vege, slide it into slot 1
+            if(heldSalad2 != null) //if there is a 2nd salad, slide it into slot 1
             {
-                heldVegetable1 = heldVegetable2;
-                heldVegetable2 = null;
+                heldSalad1 = heldSalad2;
+                heldSalad2 = null;
             }
-            else //otherwise just drop the 1st vege
+            else //otherwise just drop the 1st salad
             {
-                heldVegetable1 = null;
+                heldSalad1 = null;
             }
         }
-        else if(heldVegetable2 != null && heldVegetable2 == vege) //if dropping the 2nd vege, no slide required
+        else if(heldSalad2 != null && heldSalad2 == salad) //if dropping the 2nd salad, no slide required
         {
-            heldVegetable2 = null;
+            heldSalad2 = null;
         }
 
         //update held vege UI
-        UpdateHeldVegetableUI();
+        UpdateHeldSaladUI();
     }
 }
