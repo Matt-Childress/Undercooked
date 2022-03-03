@@ -115,6 +115,18 @@ public class Player : MonoBehaviour
                     DropSalad(heldSalad2);
                 }
             }
+            else if (highlightedSelectable is TrashCan)
+            {
+                //can only throw finished salads in the trash
+                if (heldSalad1 != null && heldSalad1.isFinished)
+                {
+                    DropSalad(heldSalad1);
+                }
+                else if (heldSalad2 != null && heldSalad2.isFinished)
+                {
+                    DropSalad(heldSalad2);
+                }
+            }
         }
     }
 
