@@ -22,6 +22,10 @@ public class Player : MonoBehaviour
     [HideInInspector]
     public VegetableType heldVegetable2 = 0;
 
+    private bool isChopping;
+
+    private Rigidbody2D rb;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -38,6 +42,9 @@ public class Player : MonoBehaviour
                 heldVegetable2Text = vegeTexts[1];
             }
         }
+
+        //setting rigidbody on start
+        rb = GetComponent<Rigidbody2D>();
     }
 
     // Update is called once per frame
@@ -49,17 +56,20 @@ public class Player : MonoBehaviour
     //player movement method
     public void Move(float hIn, float vIn)
     {
-        //make a Vector2 with the movement input parameters
-        Vector3 direction = new Vector2(hIn, vIn);
+        if (!isChopping) //don't allow movement if the player is currently chopping
+        {
+            //make a Vector2 with the movement input parameters
+            Vector3 direction = new Vector2(hIn, vIn);
 
-        //update the player object's position with respect to the Vector3 direction and the player's speed
-        transform.position += direction * speed;
+            //update the player object's position with respect to the Vector3 direction and the player's speed
+            transform.position += direction * speed;
+        }
     }
 
     //method for deciding on which action to perform, if any
     public void PerformAction()
     {
-        if (highlightedSelectable) // if the player is currently selecting something
+        if (highlightedSelectable && !isChopping) //dont perform anything if the player is chopping or if nothing is selected
         {
             if (highlightedSelectable is VegetableTable) //if the highlighted selectable is a vegetable table
             {
@@ -74,9 +84,14 @@ public class Player : MonoBehaviour
                     heldVegetable2 = vegetable.type;
                     UpdateHeldVegetableUI();
                 }
-                else
+            }
+            else if(highlightedSelectable is ChoppingBlock)
+            {
+                ChoppingBlock chopBlock = highlightedSelectable as ChoppingBlock; //temporary variable with access to chopping block attributes
+
+                if(heldVegetable1 > 0) //if the player is holding a vegetable, chop it
                 {
-                    Debug.Log("Hands are full, can't pick up a 3rd Vegetable");
+                    Chop(chopBlock.choppingWaitTime);
                 }
             }
         }
@@ -87,5 +102,23 @@ public class Player : MonoBehaviour
         //set text field above the player to the correct held vegetables
         heldVegetable1Text.text = heldVegetable1 != 0 ? heldVegetable1.ToString() : "";
         heldVegetable2Text.text = heldVegetable2 != 0 ? heldVegetable2.ToString() : "";
+    }
+
+    private void Chop(float waitTime)
+    {
+        //method starts a Chopping Coroutine to hold the player in place and chop the vegetable over a wait time
+        StartCoroutine(ChoppingRoutine(waitTime));
+    }
+
+    private IEnumerator ChoppingRoutine(float waitTime)
+    {
+        //flip the isChopping bool to lock movement and actions by the player object, as well as lock the physics rigidbody so the other player can't push them
+        isChopping = true;
+        rb.bodyType = RigidbodyType2D.Kinematic;
+
+        yield return new WaitForSeconds(waitTime);
+
+        rb.bodyType = RigidbodyType2D.Dynamic;
+        isChopping = false;
     }
 }
