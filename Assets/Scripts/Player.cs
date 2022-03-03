@@ -91,7 +91,7 @@ public class Player : MonoBehaviour
 
                 if(heldVegetable1 > 0) //if the player is holding a vegetable, chop it
                 {
-                    Chop(chopBlock.choppingWaitTime);
+                    chopBlock.StartChop(this, heldVegetable1);
                 }
             }
         }
@@ -104,21 +104,10 @@ public class Player : MonoBehaviour
         heldVegetable2Text.text = heldVegetable2 != 0 ? heldVegetable2.ToString() : "";
     }
 
-    private void Chop(float waitTime)
+    public void HandlePlayerLock(bool locking)
     {
-        //method starts a Chopping Coroutine to hold the player in place and chop the vegetable over a wait time
-        StartCoroutine(ChoppingRoutine(waitTime));
-    }
-
-    private IEnumerator ChoppingRoutine(float waitTime)
-    {
-        //flip the isChopping bool to lock movement and actions by the player object, as well as lock the physics rigidbody so the other player can't push them
-        isChopping = true;
-        rb.bodyType = RigidbodyType2D.Kinematic;
-
-        yield return new WaitForSeconds(waitTime);
-
-        rb.bodyType = RigidbodyType2D.Dynamic;
-        isChopping = false;
+        //flip the isChopping bool to lock/unlock movement and actions by the player object, as well as the physics rigidbody so the other player can't push them
+        isChopping = locking;
+        rb.bodyType = locking ? RigidbodyType2D.Kinematic : RigidbodyType2D.Dynamic;
     }
 }
