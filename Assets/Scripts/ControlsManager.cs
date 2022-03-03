@@ -4,28 +4,14 @@ using UnityEngine;
 
 public class ControlsManager : MonoBehaviour
 {
-    public Player player1;
-    public Player player2;
+    //hold reference to GameManager instance
+    private GameManager gm;
 
     // Start is called before the first frame update
     void Start()
     {
-        //this statement will handle the case that players have not been defined in the scene
-        if(!player1 || !player2)
-        {
-            var players = FindObjectsOfType<Player>();
-            foreach(var player in players)
-            {
-                if(!player1)
-                {
-                    player1 = player;
-                }
-                else if(!player2)
-                {
-                    player2 = player;
-                }
-            }
-        }
+        //grab GameManager instance on start
+        gm = GameManager.instance;
     }
 
     // Update is called once per frame
@@ -52,12 +38,12 @@ public class ControlsManager : MonoBehaviour
 
         if (p1H != 0f || p1V != 0f)
         {
-            player1.Move(p1H, p1V); //if horizontal or vertical keys are pressed, call the player1 movement method
+            gm.player1.Move(p1H, p1V); //if horizontal or vertical keys are pressed, call the player1 movement method
         }
 
         if (p2H != 0f || p2V != 0f)
         {
-            player2.Move(p2H, p2V); //if horizontal or vertical keys are pressed, call the player2 movement method
+            gm.player2.Move(p2H, p2V); //if horizontal or vertical keys are pressed, call the player2 movement method
         }
     }
 
@@ -66,22 +52,22 @@ public class ControlsManager : MonoBehaviour
         //if an action key is pressed, call the player method for deciding which action to take
         if(Input.GetButtonDown("P1PickUp"))
         {
-            player1.PickItemUp();
+            gm.player1.PickItemUp();
         }
         
         if(Input.GetButtonDown("P2PickUp"))
         {
-            player2.PickItemUp();
+            gm.player2.PickItemUp();
         }
 
         if (Input.GetButtonDown("P1PutDown"))
         {
-            player1.PutItemDown();
+            gm.player1.PutItemDown();
         }
 
         if (Input.GetButtonDown("P2PutDown"))
         {
-            player2.PutItemDown();
+            gm.player2.PutItemDown();
         }
     }
 }

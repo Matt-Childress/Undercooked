@@ -8,6 +8,14 @@ public class Player : MonoBehaviour
     //speed of player movement
     public float speed = 1;
 
+    //players time remaining to play
+    public float timeLeft = 300f;
+    public int score = 0;
+
+    //references to text fields for time and score
+    public Text timeText;
+    public Text scoreText;
+
     //text fields above the player that display what vegetables are picked up
     public Text heldSalad1Text;
     public Text heldSalad2Text;
@@ -25,6 +33,8 @@ public class Player : MonoBehaviour
     private bool isChopping;
 
     private Rigidbody2D rb;
+
+    private GameManager gm;
 
     // Start is called before the first frame update
     void Start()
@@ -45,6 +55,12 @@ public class Player : MonoBehaviour
 
         //setting rigidbody on start
         rb = GetComponent<Rigidbody2D>();
+
+        //setting reference to GameManager instance
+        gm = GameManager.instance;
+
+        //start time countdown
+        StartCoroutine(Countdown());
     }
 
     //player movement method
@@ -211,5 +227,22 @@ public class Player : MonoBehaviour
 
         //update held vege UI
         UpdateHeldSaladUI();
+    }
+
+    private IEnumerator Countdown()
+    {
+        //initialize timeText
+        timeText.text = timeLeft.ToString();
+
+        float timeStep = 1f;
+
+        while(timeLeft > 0)
+        {
+            yield return new WaitForSeconds(timeStep);
+            timeLeft -= timeStep;
+            timeText.text = timeLeft.ToString();
+        }
+
+        gm.PlayerTimedOut(); //when a player times out, check if the game needs to end
     }
 }
