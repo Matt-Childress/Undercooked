@@ -78,6 +78,10 @@ public class Player : MonoBehaviour
                 {
                     chopBlock.StartChop(this, heldVegetable1);
                 }
+                else if(heldVegetable2 != null && !heldVegetable2.isChopped)
+                {
+                    chopBlock.StartChop(this, heldVegetable2); //handling dropping from slot 2
+                }
             }
         }
     }
@@ -112,17 +116,24 @@ public class Player : MonoBehaviour
         UpdateHeldVegetableUI();
     }
 
-    public void DropVegetable()
+    public void DropVegetable(Vegetable vege)
     {
-        //handle when a player puts a vegetable down out of their 1st slot
-        if(heldVegetable2 != null) //if the player has 2 vegetables, perform a dequeue
+        //handle when a player puts a vegetable down
+        if(heldVegetable1 != null && heldVegetable1 == vege)
         {
-            heldVegetable1 = heldVegetable2;
-            heldVegetable2 = null;
+            if(heldVegetable2 != null) //if there is a 2nd vege, slide it into slot 1
+            {
+                heldVegetable1 = heldVegetable2;
+                heldVegetable2 = null;
+            }
+            else //otherwise just drop the 1st vege
+            {
+                heldVegetable1 = null;
+            }
         }
-        else
+        else if(heldVegetable2 != null && heldVegetable2 == vege) //if dropping the 2nd vege, no slide required
         {
-            heldVegetable1 = null;
+            heldVegetable2 = null;
         }
 
         //update held vege UI

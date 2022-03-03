@@ -17,7 +17,7 @@ public class ChoppingBlock : Selectable
         player.HandlePlayerLock(true);
 
         //drop the first vegetable (passing it to the chop block)
-        player.DropVegetable();
+        player.DropVegetable(vege);
 
         //method starts a Coroutine to display vegetable is chopping
         StartCoroutine(ChoppingRoutine(player, vege));
