@@ -18,9 +18,9 @@ public class Player : MonoBehaviour
 
     //the player's held vegetables
     [HideInInspector]
-    public VegetableType heldVegetable1 = 0;
+    public Vegetable heldVegetable1;
     [HideInInspector]
-    public VegetableType heldVegetable2 = 0;
+    public Vegetable heldVegetable2;
 
     private bool isChopping;
 
@@ -67,23 +67,14 @@ public class Player : MonoBehaviour
         {
             if (highlightedSelectable is VegetableTable) //if the highlighted selectable is a vegetable table
             {
-                VegetableTable vegetable = highlightedSelectable as VegetableTable; //make a temporary vegetableTable variable with access to the vegetable attributes
-                if (heldVegetable1 == 0)
-                {
-                    heldVegetable1 = vegetable.type;
-                    UpdateHeldVegetableUI();
-                }
-                else if (heldVegetable2 == 0)
-                {
-                    heldVegetable2 = vegetable.type;
-                    UpdateHeldVegetableUI();
-                }
+                VegetableTable vTable = highlightedSelectable as VegetableTable; //make a temporary vegetableTable variable with access to the vegetable attributes
+                PickupVegetable(vTable.type);                
             }
             else if(highlightedSelectable is ChoppingBlock)
             {
                 ChoppingBlock chopBlock = highlightedSelectable as ChoppingBlock; //temporary variable with access to chopping block attributes
 
-                if(heldVegetable1 > 0) //if the player is holding a vegetable, chop it
+                if(heldVegetable1 != null && !heldVegetable1.isChopped) //if the player is holding a vegetable that isn't already chopped, chop it
                 {
                     chopBlock.StartChop(this, heldVegetable1);
                 }
@@ -93,9 +84,9 @@ public class Player : MonoBehaviour
 
     private void UpdateHeldVegetableUI()
     {
-        //set text field above the player to the correct held vegetables
-        heldVegetable1Text.text = heldVegetable1 != 0 ? heldVegetable1.ToString() : "";
-        heldVegetable2Text.text = heldVegetable2 != 0 ? heldVegetable2.ToString() : "";
+        //set text field above the player to the correct held vegetables, or empty if no vegetable is held in that slot
+        heldVegetable1Text.text = heldVegetable1 != null ? heldVegetable1.GetVegetableText() : string.Empty;
+        heldVegetable2Text.text = heldVegetable2 != null ? heldVegetable2.GetVegetableText() : string.Empty;
     }
 
     public void HandlePlayerLock(bool locking)
@@ -103,5 +94,38 @@ public class Player : MonoBehaviour
         //flip the isChopping bool to lock/unlock movement and actions by the player object, as well as the physics rigidbody so the other player can't push them
         isChopping = locking;
         rb.bodyType = locking ? RigidbodyType2D.Kinematic : RigidbodyType2D.Dynamic;
+    }
+
+    public void PickupVegetable(VegetableType vType, bool chopped = false)
+    {
+        //create a vegetable object and slot it to the correct hand
+        if (heldVegetable1 == null)
+        {
+            heldVegetable1 = new Vegetable(vType, chopped);
+        }
+        else if (heldVegetable2 == null)
+        {
+            heldVegetable2 = new Vegetable(vType, chopped);
+        }
+
+        //update the held vege UI texts
+        UpdateHeldVegetableUI();
+    }
+
+    public void DropVegetable()
+    {
+        //handle when a player puts a vegetable down out of their 1st slot
+        if(heldVegetable2 != null) //if the player has 2 vegetables, perform a dequeue
+        {
+            heldVegetable1 = heldVegetable2;
+            heldVegetable2 = null;
+        }
+        else
+        {
+            heldVegetable1 = null;
+        }
+
+        //update held vege UI
+        UpdateHeldVegetableUI();
     }
 }

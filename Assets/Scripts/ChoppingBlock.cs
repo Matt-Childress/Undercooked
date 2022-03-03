@@ -11,22 +11,25 @@ public class ChoppingBlock : Selectable
     //text to display the vegetable being chopped
     public Text chopText;
 
-    public void StartChop(Player player, VegetableType vege)
+    public void StartChop(Player player, Vegetable vege)
     {
         //lock the player
         player.HandlePlayerLock(true);
+
+        //drop the first vegetable (passing it to the chop block)
+        player.DropVegetable();
 
         //method starts a Coroutine to display vegetable is chopping
         StartCoroutine(ChoppingRoutine(player, vege));
     }
 
-    private IEnumerator ChoppingRoutine(Player player, VegetableType vege)
+    private IEnumerator ChoppingRoutine(Player player, Vegetable vege)
     {
         float timer = 0f; //timer to check when the chopping loop should exit
         float timeStep = 0.25f; //how often loop restarts to update chopText
 
         //make 4 strings with an additional period on each one, to cycle through and let the player know a process is happening
-        string originVegeText = vege.ToString() + "\n"; //put the elipses on a new line
+        string originVegeText = vege.type.ToString() + "\n"; //put the elipses on a new line
         string vegeText1 = originVegeText + ".";
         string vegeText2 = vegeText1 + ".";
         string vegeText3 = vegeText2 + ".";
@@ -56,13 +59,16 @@ public class ChoppingBlock : Selectable
         }
 
         //perform finished chopping actions
-        EndChop(player);
+        EndChop(player, vege.type);
     }
 
-    private void EndChop(Player player)
+    private void EndChop(Player player, VegetableType vType)
     {
         //clear the chopping block's text label
         chopText.text = string.Empty;
+
+        //player should pickup the new chopped vegetable
+        player.PickupVegetable(vType, true);
 
         //unlock the player
         player.HandlePlayerLock(false);
