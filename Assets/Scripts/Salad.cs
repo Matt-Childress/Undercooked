@@ -7,12 +7,14 @@ public class Salad
 {
     public List<VegetableType> vegetableCombination; //holds the combination of vegetables in the salad
     public bool newVegetable; //tracks if this is newly picked up from a vegetable table
+    public bool isFinished; //tracks if the salad has been picked up from the chopping board
 
-    public Salad(List<VegetableType> vegTypeCombo, bool newVege)
+    public Salad(List<VegetableType> vegTypeCombo, bool newVege, bool finished)
     {
         //constructor for new Salad object
         vegetableCombination = vegTypeCombo;
         newVegetable = newVege;
+        isFinished = finished;
     }
 
     public void CombineIntoSalad(List<VegetableType> newIngredients)
@@ -36,7 +38,7 @@ public class Salad
             {
                 if (i == vegetableCombination.Count - 1)
                 {
-                    comboString += vegetableCombination[i].ToString();
+                    comboString += vegetableCombination[i].ToString() + "\nSalad";
                 }
                 else
                 {

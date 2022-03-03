@@ -64,14 +64,24 @@ public class ControlsManager : MonoBehaviour
     private void HandleActions()
     {
         //if an action key is pressed, call the player method for deciding which action to take
-        if(Input.GetButtonDown("P1Action"))
+        if(Input.GetButtonDown("P1PickUp"))
         {
-            player1.PerformAction();
+            player1.PickItemUp();
         }
         
-        if(Input.GetButtonDown("P2Action"))
+        if(Input.GetButtonDown("P2PickUp"))
         {
-            player2.PerformAction();
+            player2.PickItemUp();
+        }
+
+        if (Input.GetButtonDown("P1PutDown"))
+        {
+            player1.PutItemDown();
+        }
+
+        if (Input.GetButtonDown("P2PutDown"))
+        {
+            player2.PutItemDown();
         }
     }
 }

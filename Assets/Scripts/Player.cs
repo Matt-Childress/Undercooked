@@ -60,8 +60,8 @@ public class Player : MonoBehaviour
         }
     }
 
-    //method for deciding on which action to perform, if any
-    public void PerformAction()
+    //method for deciding on which action to perform when pick up button is pressed, if any
+    public void PickItemUp()
     {
         if (highlightedSelectable && !isChopping) //dont perform anything if the player is chopping or if nothing is selected
         {
@@ -70,19 +70,37 @@ public class Player : MonoBehaviour
                 VegetableTable vTable = highlightedSelectable as VegetableTable; //make a temporary vegetableTable variable with access to the vegetable attributes
                 List<VegetableType> newVege = new List<VegetableType>();
                 newVege.Add(vTable.type); //add the vegetable to a new list for initialization as a new salad
-                PickupSalad(newVege, true);                
+                Salad sal = new Salad(newVege, true, false);
+                PickupSalad(sal);                
             }
-            else if(highlightedSelectable is ChoppingBlock)
+            else if(highlightedSelectable is ChoppingBlock) //if selecting a chopping block
+            {
+                ChoppingBlock chopBlock = highlightedSelectable as ChoppingBlock; //temp variable with access to chopping block attributes
+                if(chopBlock.heldSalad != null && PickupSalad(chopBlock.heldSalad)) //try to pick up salad from chopping block
+                {
+                    //remove salad from the table if it was successfully picked up
+                    chopBlock.RemoveSalad();
+                }
+            }
+        }
+    }
+
+    //method for deciding on which action to perform when put down button is pressed, if any
+    public void PutItemDown()
+    {
+        if (highlightedSelectable && !isChopping) //dont perform anything if the player is chopping or if nothing is selected
+        {
+            if (highlightedSelectable is ChoppingBlock) //if selecting a chopping block
             {
                 ChoppingBlock chopBlock = highlightedSelectable as ChoppingBlock; //temporary variable with access to chopping block attributes
 
-                if(chopBlock.ValidChop(heldSalad1)) //if a held salad can be chopped
+                if (chopBlock.ValidChop(heldSalad1)) //if a held salad can be chopped
                 {
                     chopBlock.StartChop(this, heldSalad1); //chop method
                 }
-                else if(chopBlock.ValidChop(heldSalad2)) //handling dropping from slot 2
+                else if (chopBlock.ValidChop(heldSalad2)) //handling dropping from slot 2
                 {
-                    chopBlock.StartChop(this, heldSalad2); 
+                    chopBlock.StartChop(this, heldSalad2);
                 }
             }
         }
@@ -102,20 +120,25 @@ public class Player : MonoBehaviour
         rb.bodyType = locking ? RigidbodyType2D.Kinematic : RigidbodyType2D.Dynamic;
     }
 
-    public void PickupSalad(List<VegetableType> typeCombo, bool newVegetable)
+    public bool PickupSalad(Salad salad)
     {
         //create a salad object and slot it to the correct hand
         if (heldSalad1 == null)
         {
-            heldSalad1 = new Salad(typeCombo, newVegetable);
+            heldSalad1 = salad;
         }
         else if (heldSalad2 == null)
         {
-            heldSalad2 = new Salad(typeCombo, newVegetable);
+            heldSalad2 = salad;
+        }
+        else
+        {
+            return false;
         }
 
         //update the held salad UI texts
         UpdateHeldSaladUI();
+        return true;
     }
 
     public void DropSalad(Salad salad)

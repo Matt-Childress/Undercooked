@@ -17,7 +17,7 @@ public class ChoppingBlock : Selectable
     public bool ValidChop(Salad saladBeingPlaced)
     {
         //check if a salad can be placed on a chopping block or not
-        if(saladBeingPlaced != null)
+        if(saladBeingPlaced != null && !saladBeingPlaced.isFinished) //not valid if the salad has been picked up from the board (finished)
         {
             if(heldSalad != null || saladBeingPlaced.newVegetable) //valid if the salad is being combined into an existing salad, or it is a new vegetable
             {
@@ -26,6 +26,12 @@ public class ChoppingBlock : Selectable
         }
 
         return false;
+    }
+
+    public void RemoveSalad()
+    {
+        heldSalad = null;
+        UpdateHeldSaladUI();
     }
 
     public void StartChop(Player player, Salad salad)
@@ -37,10 +43,10 @@ public class ChoppingBlock : Selectable
         player.DropSalad(salad);
 
         //method starts a Coroutine to display the salad is chopping
-        StartCoroutine(ChoppingRoutine(player, salad.vegetableCombination));
+        StartCoroutine(ChoppingRoutine(player, salad));
     }
 
-    private IEnumerator ChoppingRoutine(Player player, List<VegetableType> newIngredients)
+    private IEnumerator ChoppingRoutine(Player player, Salad salad)
     {
         float timer = 0f; //timer to check when the chopping loop should exit
         float timeStep = 0.25f; //how often loop restarts to update chopText
@@ -48,11 +54,13 @@ public class ChoppingBlock : Selectable
         //combine the new ingredients with the current held salad combination if there is one, or create a new held salad
         if (heldSalad != null)
         {
-            heldSalad.CombineIntoSalad(newIngredients);
+            heldSalad.CombineIntoSalad(salad.vegetableCombination);
         }
         else
         {
-            heldSalad = new Salad(newIngredients, false);
+            heldSalad = salad;
+            heldSalad.newVegetable = false;
+            heldSalad.isFinished = true;
         }
 
         //make 4 strings with an additional period on each one, to cycle through and let the player know a process is happening
