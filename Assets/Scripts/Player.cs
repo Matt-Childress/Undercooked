@@ -136,15 +136,10 @@ public class Player : MonoBehaviour
                 Customer cust = highlightedSelectable as Customer; //access to customer attributes
 
                 //can only hand finished salads to customers
-                if(heldSalad1 != null && heldSalad1.isChopped)
+                if((heldSalad1 != null && heldSalad1.isChopped) || (heldSalad2 != null && heldSalad2.isChopped))
                 {
-                    cust.HandedSalad(this, heldSalad1.vegetableCombination);
-                    DropSalad(heldSalad1);
-                }
-                else if (heldSalad2 != null && heldSalad2.isChopped)
-                {
-                    cust.HandedSalad(this, heldSalad2.vegetableCombination);
-                    DropSalad(heldSalad2);
+                    Salad salad = cust.HandedSalad(this); //let customer handle which salad is correct
+                    DropSalad(salad);
                 }
             }
             else if (highlightedSelectable is TrashCan)

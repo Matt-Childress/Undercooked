@@ -99,14 +99,25 @@ public class Customer : Selectable
         }
     }
 
-    public void HandedSalad(Player p, List<VegetableType> veges)
+    public Salad HandedSalad(Player p)
     {
         //handle when a player hands this customer a salad
+        Salad correctSalad = null;
 
-        //score handling
-        if(EqualVegeCombos(veges, targetSalad.vegetableCombination))
+        //find which held salad should be given if any
+        if(p.heldSalad1 != null && SaladMatchesTarget(p.heldSalad1.vegetableCombination))
         {
-            p.AdjustScore(10);
+            correctSalad = p.heldSalad2;
+        }
+        else if(p.heldSalad2 != null && SaladMatchesTarget(p.heldSalad2.vegetableCombination))
+        {
+            correctSalad = p.heldSalad2;
+        }
+
+        //if a held salad was correct
+        if(correctSalad != null)
+        {
+            p.AdjustScore(10); //score handling
             StopCoroutine(waiting); //stop the waiting coroutine
             LoadNewSalad(); //give the customer a new desired Salad
         }
@@ -115,17 +126,19 @@ public class Customer : Selectable
             //handle when an incorrect salad is given
             MakeAngry();
         }
+
+        return correctSalad;
     }
 
-    private bool EqualVegeCombos(List<VegetableType> list1, List<VegetableType> list2)
+    private bool SaladMatchesTarget(List<VegetableType> givenSalad)
     {
-        if(list1 != null && list2 != null)
+        if(givenSalad != null)
         {
-            if(list1.Count == list2.Count)
+            if(givenSalad.Count == targetSalad.vegetableCombination.Count)
             {
-                for(int i = 0; i < list1.Count; i++)
+                for(int i = 0; i < givenSalad.Count; i++)
                 {
-                    if(list1[i] != list2[i])
+                    if(givenSalad[i] != targetSalad.vegetableCombination[i])
                     {
                         return false; //if any of the vegetables aren't the same at the same index, the combos are NOT equal
                     }
