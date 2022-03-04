@@ -138,12 +138,12 @@ public class Player : MonoBehaviour
                 //can only hand finished salads to customers
                 if(heldSalad1 != null && heldSalad1.isFinished)
                 {
-                    cust.HandedSalad(this, heldSalad1);
+                    cust.HandedSalad(this, heldSalad1.vegetableCombination);
                     DropSalad(heldSalad1);
                 }
                 else if (heldSalad2 != null && heldSalad2.isFinished)
                 {
-                    cust.HandedSalad(this, heldSalad2);
+                    cust.HandedSalad(this, heldSalad2.vegetableCombination);
                     DropSalad(heldSalad2);
                 }
             }

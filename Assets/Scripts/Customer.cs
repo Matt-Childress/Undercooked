@@ -71,14 +71,42 @@ public class Customer : Selectable
         }
     }
 
-    public void HandedSalad(Player p, Salad s)
+    public void HandedSalad(Player p, List<VegetableType> veges)
     {
         //handle when a player hands this customer a salad
 
-        //TODO: score handling
-        p.AdjustScore(10);
+        //score handling
+        if(EqualVegeCombos(veges, targetSalad.vegetableCombination))
+        {
+            p.AdjustScore(10);
+        }
+        else
+        {
+            Debug.Log("Wrong salad!");
+        }
 
         //give the customer a new desired Salad
         LoadNewSalad();
+    }
+
+    private bool EqualVegeCombos(List<VegetableType> list1, List<VegetableType> list2)
+    {
+        if(list1 != null && list2 != null)
+        {
+            if(list1.Count == list2.Count)
+            {
+                for(int i = 0; i < list1.Count; i++)
+                {
+                    if(list1[i] != list2[i])
+                    {
+                        return false;
+                    }
+                }
+
+                return true;
+            }
+        }
+
+        return false;
     }
 }
