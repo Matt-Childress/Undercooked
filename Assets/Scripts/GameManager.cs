@@ -70,6 +70,13 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void AdjustScoreOfBothPlayers(int adjustment)
+    {
+        //method to adjust score of both players equally and simultaneously
+        player1.AdjustScore(adjustment);
+        player2.AdjustScore(adjustment);
+    }
+
     public void PlayerTimedOut(Player player)
     {
         //lock player movement and actions, disable the player object, and deselect any selectables it has selected

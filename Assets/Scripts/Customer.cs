@@ -7,14 +7,25 @@ public class Customer : Selectable
 {
     public Text targetSaladText;
 
+    public Slider waitingBarSlider;
+
     private Salad targetSalad;
 
     private List<VegetableType> vegeList; //store list to reuse each load
     private VegetableType[] shuffleVList; //list to shuffle and pull from each load
 
+    private float waitTime; //store how long the customer will wait before leaving and new order load
+    private const float vegetableTimeValue = 20f; //each vegetable adds 20 seconds to the customer's wait time
+
+    private Coroutine waiting;
+
+    private GameManager gm; //hold reference to GameManager instance
+
     protected override void Start()
     {
         base.Start(); //handle Selectable Start functions
+
+        gm = GameManager.instance;
 
         vegeList = new List<VegetableType>(); //init vege list
 
@@ -37,6 +48,11 @@ public class Customer : Selectable
 
         //display the customer's desired salad
         targetSaladText.text = targetSalad.GetSaladText();
+
+        //update the customer's wait time based on number of vegetables
+        waitTime = targetSalad.vegetableCombination.Count * vegetableTimeValue;
+        //start customer waiting coroutine
+        waiting = StartCoroutine(Waiting());
     }
 
     private Salad RandomSalad() //make a salad with a randomized vegetable combination
@@ -79,14 +95,13 @@ public class Customer : Selectable
         if(EqualVegeCombos(veges, targetSalad.vegetableCombination))
         {
             p.AdjustScore(10);
+            StopCoroutine(waiting); //stop the waiting coroutine
+            LoadNewSalad(); //give the customer a new desired Salad
         }
         else
         {
             Debug.Log("Wrong salad!");
         }
-
-        //give the customer a new desired Salad
-        LoadNewSalad();
     }
 
     private bool EqualVegeCombos(List<VegetableType> list1, List<VegetableType> list2)
@@ -108,5 +123,25 @@ public class Customer : Selectable
         }
 
         return false; //if a list is null or has a different count than the other, the combos are NOT equal
+    }
+
+    private IEnumerator Waiting()
+    {
+        float totalTime = waitTime;
+
+        while(waitTime > 0f)
+        {
+            yield return null;
+
+            waitingBarSlider.value = Mathf.Lerp(1f, 0f, (totalTime - waitTime) / totalTime);
+
+            waitTime -= Time.deltaTime;
+        }
+
+        //deduct score from both players
+        gm.AdjustScoreOfBothPlayers(-10);
+
+        //new order after done waiting
+        LoadNewSalad();
     }
 }
