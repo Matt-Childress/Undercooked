@@ -133,16 +133,18 @@ public class Player : MonoBehaviour
             }
             else if(highlightedSelectable is Customer)
             {
+                Customer cust = highlightedSelectable as Customer; //access to customer attributes
+
                 //can only hand finished salads to customers
                 if(heldSalad1 != null && heldSalad1.isFinished)
                 {
+                    cust.HandedSalad(this, heldSalad1);
                     DropSalad(heldSalad1);
-                    AdjustScore(10);
                 }
                 else if (heldSalad2 != null && heldSalad2.isFinished)
                 {
+                    cust.HandedSalad(this, heldSalad2);
                     DropSalad(heldSalad2);
-                    AdjustScore(10);
                 }
             }
             else if (highlightedSelectable is TrashCan)

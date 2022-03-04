@@ -14,10 +14,16 @@ public class Customer : Selectable
         base.Start(); //handle Selectable Start functions
 
         //initialize the customer's data
+        LoadNewSalad();
+    }
+
+    private void LoadNewSalad()
+    {
+        //get new salad combo
         targetSalad = RandomSalad();
 
-        //update the customer's UI
-        UpdateCustomerUI();
+        //display the customer's desired salad
+        targetSaladText.text = targetSalad.GetSaladText();
     }
 
     private Salad RandomSalad() //make a salad with a randomized vegetable combination
@@ -39,9 +45,14 @@ public class Customer : Selectable
         return new Salad(vegeList, false, true);
     }
 
-    private void UpdateCustomerUI()
+    public void HandedSalad(Player p, Salad s)
     {
-        //display the customer's desired salad
-        targetSaladText.text = targetSalad.GetSaladText();
+        //handle when a player hands this customer a salad
+
+        //TODO: score handling
+        p.AdjustScore(10);
+
+        //give the customer a new desired Salad
+        LoadNewSalad();
     }
 }
