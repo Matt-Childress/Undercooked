@@ -9,9 +9,22 @@ public class Customer : Selectable
 
     private Salad targetSalad;
 
+    private List<VegetableType> vegeList; //store list to reuse each load
+    private VegetableType[] shuffleVList; //list to shuffle and pull from each load
+
     protected override void Start()
     {
         base.Start(); //handle Selectable Start functions
+
+        vegeList = new List<VegetableType>(); //init vege list
+
+        //set length to count of vegeTypes (minus the None type)
+        shuffleVList = new VegetableType[System.Enum.GetValues(typeof(VegetableType)).Length - 1];
+        //initialize the shuffling list with the ordered vegetabletypes enum
+        for (int i = 0; i < shuffleVList.Length; i++)
+        {
+            shuffleVList[i] = (VegetableType)(i + 1);
+        }
 
         //initialize the customer's data
         LoadNewSalad();
@@ -28,21 +41,34 @@ public class Customer : Selectable
 
     private Salad RandomSalad() //make a salad with a randomized vegetable combination
     {
+        //clear out the vege List
+        vegeList.Clear();
+
+        //shuffle the stored vege list
+        ShuffleVegeList();
+
         //decide how many vegetables in this salad
-        int vegetableCount = Random.Range(0, 3); //evenly weighted between 1, 2, or 3...this could go higher
-
-        //store number of vegetableType options for randomly selecting in loop below
-        int vegeTypesCount = System.Enum.GetValues(typeof(VegetableType)).Length;
-
-        //initialize list of vegetable types
-        List<VegetableType> vegeList = new List<VegetableType>();
-        for(int i = 0; i <= vegetableCount; i++)
+        int vegetableCount = Random.Range(1, 4); //evenly weighted between 1, 2, or 3. this could be higher
+        //pull the desired number of vegetables from the shuffled list
+        for(int i = 0; i < vegetableCount; i++)
         {
-            vegeList.Add((VegetableType)Random.Range(1, vegeTypesCount)); //add vegetable type enum at the randomly chosen index value
+            vegeList.Add(shuffleVList[i]);
         }
 
         //return new salad with the created random vege combo (not a new vegetable and is a finished salad for comparison)
         return new Salad(vegeList, false, true);
+    }
+
+    private void ShuffleVegeList()
+    {
+        //shuffle the list for a random order of vegetables each load
+        for (int i = 0; i < shuffleVList.Length; i++)
+        {
+            VegetableType temp = shuffleVList[i];
+            int randomIndex = Random.Range(i, shuffleVList.Length);
+            shuffleVList[i] = shuffleVList[randomIndex];
+            shuffleVList[randomIndex] = temp;
+        }
     }
 
     public void HandedSalad(Player p, Salad s)
