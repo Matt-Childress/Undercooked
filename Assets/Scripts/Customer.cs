@@ -99,14 +99,14 @@ public class Customer : Selectable
                 {
                     if(list1[i] != list2[i])
                     {
-                        return false;
+                        return false; //if any of the vegetables aren't the same at the same index, the combos are NOT equal
                     }
                 }
 
-                return true;
+                return true; // if all vegetables are the same, the combos are equal
             }
         }
 
-        return false;
+        return false; //if a list is null or has a different count than the other, the combos are NOT equal
     }
 }
