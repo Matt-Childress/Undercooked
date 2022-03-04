@@ -13,8 +13,8 @@ public class Plate : Selectable
 
     public bool ValidVegetable(Salad salad)
     {
-        //only new vegetables can be put on plates, and only if the plate is empty
-        return heldVege == null && salad.newVegetable;
+        //only unchopped vegetables can be put on plates, and only if the plate is empty
+        return heldVege == null && !salad.isChopped;
     }
 
     public void HoldVegetable(Salad salad)

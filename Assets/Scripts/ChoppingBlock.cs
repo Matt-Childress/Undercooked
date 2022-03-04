@@ -17,12 +17,9 @@ public class ChoppingBlock : Selectable
     public bool ValidChop(Salad saladBeingPlaced)
     {
         //check if a salad can be placed on a chopping block or not
-        if(saladBeingPlaced != null && !saladBeingPlaced.isFinished) //not valid if the salad has been picked up from the board (finished)
+        if(saladBeingPlaced != null && !saladBeingPlaced.isChopped) //not valid if the salad has been chopped
         {
-            if(heldSalad != null || saladBeingPlaced.newVegetable) //valid if the salad is being combined into an existing salad, or it is a new vegetable
-            {
-                return true;
-            }
+            return true;
         }
 
         return false;
@@ -59,8 +56,7 @@ public class ChoppingBlock : Selectable
         else
         {
             heldSalad = salad;
-            heldSalad.newVegetable = false;
-            heldSalad.isFinished = true;
+            heldSalad.isChopped = true;
         }
 
         //make 4 strings with an additional period on each one, to cycle through and let the player know a process is happening

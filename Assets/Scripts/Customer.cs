@@ -71,8 +71,8 @@ public class Customer : Selectable
             vegeList.Add(shuffleVList[i]);
         }
 
-        //return new salad with the created random vege combo (not a new vegetable and is a finished salad for comparison)
-        return new Salad(vegeList, false, true);
+        //return new salad with the created random vege combo (is a chopped salad for comparison)
+        return new Salad(vegeList, true);
     }
 
     private void ShuffleVegeList()

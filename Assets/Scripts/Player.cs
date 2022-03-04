@@ -89,7 +89,7 @@ public class Player : MonoBehaviour
                 VegetableTable vTable = highlightedSelectable as VegetableTable; //make a temporary vegetableTable variable with access to the vegetable attributes
                 List<VegetableType> newVege = new List<VegetableType>();
                 newVege.Add(vTable.type); //add the vegetable to a new list for initialization as a new salad
-                Salad sal = new Salad(newVege, true, false);
+                Salad sal = new Salad(newVege, false);
                 PickupSalad(sal);                
             }
             else if(highlightedSelectable is ChoppingBlock) //if selecting a chopping block
@@ -136,12 +136,12 @@ public class Player : MonoBehaviour
                 Customer cust = highlightedSelectable as Customer; //access to customer attributes
 
                 //can only hand finished salads to customers
-                if(heldSalad1 != null && heldSalad1.isFinished)
+                if(heldSalad1 != null && heldSalad1.isChopped)
                 {
                     cust.HandedSalad(this, heldSalad1.vegetableCombination);
                     DropSalad(heldSalad1);
                 }
-                else if (heldSalad2 != null && heldSalad2.isFinished)
+                else if (heldSalad2 != null && heldSalad2.isChopped)
                 {
                     cust.HandedSalad(this, heldSalad2.vegetableCombination);
                     DropSalad(heldSalad2);
@@ -150,12 +150,12 @@ public class Player : MonoBehaviour
             else if (highlightedSelectable is TrashCan)
             {
                 //can only throw finished salads in the trash
-                if (heldSalad1 != null && heldSalad1.isFinished)
+                if (heldSalad1 != null && heldSalad1.isChopped)
                 {
                     DropSalad(heldSalad1);
                     AdjustScore(-5);
                 }
-                else if (heldSalad2 != null && heldSalad2.isFinished)
+                else if (heldSalad2 != null && heldSalad2.isChopped)
                 {
                     DropSalad(heldSalad2);
                     AdjustScore(-5);
@@ -181,9 +181,27 @@ public class Player : MonoBehaviour
 
     private void UpdateHeldSaladUI()
     {
-        //set text field above the player to the correct held salads, or empty if no salad is held in that slot
-        heldSalad1Text.text = heldSalad1 != null ? heldSalad1.GetSaladText() : string.Empty;
-        heldSalad2Text.text = heldSalad2 != null ? heldSalad2.GetSaladText() : string.Empty;
+        //update slot 1 salad text and color
+        if(heldSalad1 != null)
+        {
+            heldSalad1Text.text = heldSalad1.GetSaladText();
+            heldSalad1Text.color = heldSalad1.GetSaladColor();
+        }
+        else
+        {
+            heldSalad1Text.text = string.Empty;
+        }
+
+        //update slot 2 salad text and color
+        if (heldSalad2 != null)
+        {
+            heldSalad2Text.text = heldSalad2.GetSaladText();
+            heldSalad2Text.color = heldSalad2.GetSaladColor();
+        }
+        else
+        {
+            heldSalad2Text.text = string.Empty;
+        }
     }
 
     public void HandlePlayerLock(bool locking)
