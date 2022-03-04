@@ -9,6 +9,8 @@ public class Customer : Selectable
 
     public Slider waitingBarSlider;
 
+    public Image waitingBarFill;
+
     private Salad targetSalad;
 
     private List<VegetableType> vegeList; //store list to reuse each load
@@ -21,11 +23,18 @@ public class Customer : Selectable
 
     private GameManager gm; //hold reference to GameManager instance
 
+    private bool isAngry; //variables for angry customer handling
+    private Color calmColor;
+    private Color angryColor = Color.red;
+
     protected override void Start()
     {
         base.Start(); //handle Selectable Start functions
 
         gm = GameManager.instance;
+
+        //set normal waiting bar color to starting color
+        calmColor = waitingBarFill.color;
 
         vegeList = new List<VegetableType>(); //init vege list
 
@@ -43,6 +52,9 @@ public class Customer : Selectable
 
     private void LoadNewSalad()
     {
+        //calm the new customer
+        MakeCalm();
+
         //get new salad combo
         targetSalad = RandomSalad();
 
@@ -100,7 +112,8 @@ public class Customer : Selectable
         }
         else
         {
-            Debug.Log("Wrong salad!");
+            //handle when an incorrect salad is given
+            MakeAngry();
         }
     }
 
@@ -128,6 +141,7 @@ public class Customer : Selectable
     private IEnumerator Waiting()
     {
         float totalTime = waitTime;
+        float speed = 1f;
 
         while(waitTime > 0f)
         {
@@ -135,7 +149,11 @@ public class Customer : Selectable
 
             waitingBarSlider.value = Mathf.Lerp(1f, 0f, (totalTime - waitTime) / totalTime);
 
-            waitTime -= Time.deltaTime;
+            if(isAngry)
+            {
+                speed = 2f;
+            }
+            waitTime -= Time.deltaTime * speed;
         }
 
         //deduct score from both players
@@ -143,5 +161,18 @@ public class Customer : Selectable
 
         //new order after done waiting
         LoadNewSalad();
+    }
+
+    private void MakeAngry()
+    {
+        //handle making the customer angry
+        isAngry = true;
+        waitingBarFill.color = angryColor;
+    }
+    private void MakeCalm()
+    {
+        //handle making the customer calm again
+        isAngry = false;
+        waitingBarFill.color = calmColor;
     }
 }
