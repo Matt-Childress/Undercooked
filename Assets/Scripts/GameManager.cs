@@ -20,12 +20,15 @@ public class GameManager : MonoBehaviour
     //hold the vegetable table objects
     public VegetableTable[] vegetableTables;
 
+    void Awake()
+    {
+        //assign the gamemanager instance on awake
+        instance = this;
+    }
+
     // Start is called before the first frame update
     void Start()
     {
-        //assign the gamemanager instance on start
-        instance = this;
-
         //this statement will handle the case that players have not been defined in the scene
         if (!player1 || !player2)
         {
