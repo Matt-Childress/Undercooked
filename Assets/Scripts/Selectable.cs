@@ -13,7 +13,7 @@ public class Selectable : MonoBehaviour
     private int highlightingPlayerCount;
 
     // Start is called before the first frame update
-    void Start()
+    protected virtual void Start()
     {
         //assign selectableImage and unselected color on start
         selectableImage = GetComponent<Image>();
