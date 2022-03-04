@@ -29,7 +29,7 @@ public class Salad
         //return a string that reflects the vegetables and if it is a newly gathered vege
         if(newVegetable)
         {
-            return "New\n" + vegetableCombination[0].ToString();
+            return vegetableCombination[0].ToString() + "\nVegetable";
         }
         else
         {
@@ -38,7 +38,7 @@ public class Salad
             {
                 if (i == vegetableCombination.Count - 1)
                 {
-                    comboString += vegetableCombination[i].ToString() + "\nSalad";
+                    comboString += vegetableCombination[i].ToString();
                 }
                 else
                 {
