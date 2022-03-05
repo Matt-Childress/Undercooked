@@ -16,6 +16,7 @@ public class GameManager : MonoBehaviour
     //hold game over ui variables
     public GameObject gameOverPanel;
     public Text winnerText;
+    public Text highScoresText;
 
     //hold the vegetable table objects
     public VegetableTable[] vegetableTables;
@@ -128,21 +129,51 @@ public class GameManager : MonoBehaviour
             string winnerMessage = string.Empty;
             if (player1.score == player2.score)
             {
-                winnerMessage = "Tie!";
+                winnerMessage = "Tie!\nScore: " + player1.score;
             }
             else if(player1.score > player2.score)
             {
-                winnerMessage = "Player 1 Wins!";
+                winnerMessage = "Player 1 Wins!\nScore: " + player1.score;
             }
             else
             {
-                winnerMessage = "Player 2 Wins!";
+                winnerMessage = "Player 2 Wins!\nScore: " + player2.score;
             }
             winnerText.text = winnerMessage;
 
             //end game ui popup
             gameOverPanel.SetActive(true);
+
+            //see if need to save new high score
+            SaveManager.instance.CheckNewScores(player1.score, player2.score);
+
+            //print the updated high scores list
+            UpdateHighScoresUI();
         }
+    }
+
+    private void UpdateHighScoresUI()
+    {
+        //create a string and append each iteration through the high score list, formatting for the game over UI
+
+        int[] hS = SaveManager.instance.saveData.highScores;
+
+        string formattedString = string.Empty;
+
+        for(int i = 0; i < hS.Length; i++)
+        {
+            if (hS[i] > 0) //don't list any scores of 0
+            {
+                formattedString += ((i + 1) + ". " + hS[i]);
+            }
+
+            if(i < hS.Length - 1) //on the last line dont include new line
+            {
+                formattedString += "\n";
+            }
+        }
+
+        highScoresText.text = formattedString;
     }
 
     public void ResetGame()
