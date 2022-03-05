@@ -117,6 +117,11 @@ public class Customer : Selectable
         //if a held salad was correct
         if(correctSalad != null)
         {
+            if(GetWaitTimeRemainingPercentage() >= 0.7f)//if the correct delivery was made with 70% wait time remaining or more
+            {
+                Debug.Log("Spawn pickup for " + p.gameObject.name);//spawn a pickup for the appropriate player
+            }
+
             p.AdjustScore(10); //score handling
             StopCoroutine(waiting); //stop the waiting coroutine
             LoadNewSalad(); //give the customer a new desired Salad
@@ -215,5 +220,11 @@ public class Customer : Selectable
         //handle making the customer calm again
         angerTarget = AngerTargetPlayer.None;
         waitingBarFill.color = calmColor;
+    }
+
+    private float GetWaitTimeRemainingPercentage()
+    {
+        //return the percent of waitTime remaining to decide if a pickup should be spawned
+        return waitingBarSlider.value;
     }
 }
