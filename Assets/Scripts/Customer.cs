@@ -107,7 +107,7 @@ public class Customer : Selectable
         //find which held salad should be given if any
         if(p.heldSalad1 != null && SaladMatchesTarget(p.heldSalad1.vegetableCombination))
         {
-            correctSalad = p.heldSalad2;
+            correctSalad = p.heldSalad1;
         }
         else if(p.heldSalad2 != null && SaladMatchesTarget(p.heldSalad2.vegetableCombination))
         {
