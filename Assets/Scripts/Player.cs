@@ -264,6 +264,13 @@ public class Player : MonoBehaviour
     public void AdjustScore(int adjustment)
     {
         score += adjustment;
+
+        //dont let score go below 0
+        if(score < 0)
+        {
+            score = 0;
+        }
+
         scoreText.text = score.ToString();
     }
 
