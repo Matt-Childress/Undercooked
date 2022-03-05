@@ -1,37 +1,37 @@
-# Undercooked Cooking Master
+﻿# Undercooked Cooking Master
  
 Project Unity version 2019.4.36f1 (Current 2019.4.3 LTS Version)
 
-Player Controls
+## Player Controls
 
 
-Player 1 Movement
+### Player 1 Movement
 
-'w', 'a', 's', 'd'
+`w`, `a`, `s`, `d`
 
-Player 1 Actions
+### Player 1 Actions
 
-'c' -> Pick Item Up
-'v' -> Put Item Down
+`c` -> Pick Item Up
+`v` -> Put Item Down
 
-Player 2 Movement
+### Player 2 Movement
 
-'up', 'left', 'down', 'right' (Arrow Keys)
+`up`, `left`, `down`, `right` (Arrow Keys)
 
-Player 2 Actions
+### Player 2 Actions
 
-'-' -> Pick Item Up
-'=' -> Put Item Down
-
-
-Salad Status
-
-A newly picked up Vegetable has an Orange text color. eg Carrot
-
-A chopped vegetable becomes a Salad which has a Purple text color. eg Carrot
+`-` -> Pick Item Up
+`=` -> Put Item Down
 
 
-Carried Items
+## Salad Status
+
+🟠 A newly picked up Vegetable has an Orange text color. 🟠
+
+🟣 A chopped vegetable becomes a Salad which has a Purple text color. 🟣
+
+
+## Carried Items Information
 
 The item that a player picks up first is on their left side, with their second priority item on their right side.
 
