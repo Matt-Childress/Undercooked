@@ -119,7 +119,8 @@ public class Customer : Selectable
         {
             if(GetWaitTimeRemainingPercentage() >= 0.7f)//if the correct delivery was made with 70% wait time remaining or more
             {
-                Debug.Log("Spawn pickup for " + p.gameObject.name);//spawn a pickup for the appropriate player
+                //spawn a pickup for the appropriate player
+                gm.SpawnPickup(p);
             }
 
             p.AdjustScore(10); //score handling

@@ -16,3 +16,10 @@ public enum AngerTargetPlayer //this enum reflects the types of anger a customer
     Player2 = 2,
     Both = 3,
 }
+
+public enum PickupType //the 3 types of earned pickups for players
+{
+    Speed = 0,
+    Time = 1,
+    Score = 2,
+}

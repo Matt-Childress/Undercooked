@@ -20,6 +20,14 @@ public class GameManager : MonoBehaviour
     //hold the vegetable table objects
     public VegetableTable[] vegetableTables;
 
+    //pickups
+    public Pickup speedPickupPrefab;
+    public Pickup timePickupPrefab;
+    public Pickup scorePickupPrefab;
+    //collider bounds for spawn positioning
+    public Collider2D spawningArea;
+
+
     void Awake()
     {
         //assign the gamemanager instance on awake
@@ -68,6 +76,32 @@ public class GameManager : MonoBehaviour
         {
             Debug.LogError("Number of Vegetables and Number of Vegetable enum values differs");
         }
+    }
+
+    public void SpawnPickup(Player p)
+    {
+        //randomly decide which pickup to spawn
+        Pickup pickup;
+        switch(Random.Range(0, 3))
+        {
+            case 0:
+                pickup = Instantiate(speedPickupPrefab, spawningArea.transform);
+                break;
+            case 1:
+                pickup = Instantiate(timePickupPrefab, spawningArea.transform);
+                break;
+            default:
+                pickup = Instantiate(scorePickupPrefab, spawningArea.transform);
+                break;
+        }
+
+        pickup.targetPlayer = p;
+
+        //place the pickup in a random position within the game bounds
+        Bounds bounds = spawningArea.bounds;
+        float offsetX = Random.Range(-bounds.extents.x, bounds.extents.x);
+        float offsetY = Random.Range(-bounds.extents.y, bounds.extents.y);
+        pickup.transform.position = bounds.center + new Vector3(offsetX, offsetY, 0f);
     }
 
     public void AdjustScoreOfBothPlayers(int adjustment)
