@@ -8,3 +8,11 @@
     Turnip = 5,
     Onion = 6,
 }
+
+public enum AngerTargetPlayer //this enum reflects the types of anger a customer can have toward players
+{
+    None = 0,
+    Player1 = 1,
+    Player2 = 2,
+    Both = 3,
+}

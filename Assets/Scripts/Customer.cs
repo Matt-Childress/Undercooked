@@ -23,7 +23,7 @@ public class Customer : Selectable
 
     private GameManager gm; //hold reference to GameManager instance
 
-    private bool isAngry; //variables for angry customer handling
+    private AngerTargetPlayer angerTarget; //variables for angry customer handling
     private Color calmColor;
     private Color angryColor = Color.red;
 
@@ -124,7 +124,7 @@ public class Customer : Selectable
         else
         {
             //handle when an incorrect salad is given
-            MakeAngry();
+            MakeAngry(p);
         }
 
         return correctSalad;
@@ -162,30 +162,58 @@ public class Customer : Selectable
 
             waitingBarSlider.value = Mathf.Lerp(1f, 0f, (totalTime - waitTime) / totalTime);
 
-            if(isAngry)
+            if(angerTarget != AngerTargetPlayer.None) //if the customer is angry
             {
                 speed = 2f;
             }
             waitTime -= Time.deltaTime * speed;
         }
 
-        //deduct score from both players
-        gm.AdjustScoreOfBothPlayers(-10);
+        if (angerTarget == AngerTargetPlayer.None)
+        {
+            //deduct normal score from both players if the customer isn't angry
+            gm.AdjustScoreOfBothPlayers(-10);
+        }
+        else
+        {
+            //deduct double score from the anger target players if the customer is angry
+            switch(angerTarget)
+            {
+                case AngerTargetPlayer.Player1:
+                    gm.player1.AdjustScore(-20);
+                    break;
+                case AngerTargetPlayer.Player2:
+                    gm.player2.AdjustScore(-20);
+                    break;
+                default:
+                    gm.AdjustScoreOfBothPlayers(-20);
+                    break;
+            }
+        }
 
         //new order after done waiting
         LoadNewSalad();
     }
 
-    private void MakeAngry()
+    private void MakeAngry(Player target)
     {
         //handle making the customer angry
-        isAngry = true;
+        
+        if(target == gm.player1) //if the customer is getting angered by player 1
+        {
+            angerTarget = angerTarget == AngerTargetPlayer.None ? AngerTargetPlayer.Player1 : AngerTargetPlayer.Both; //add Player1 to the anger target type
+        }
+        else if(target == gm.player2) //if the customer is getting angered by player 2
+        {
+            angerTarget = angerTarget == AngerTargetPlayer.None ? AngerTargetPlayer.Player2 : AngerTargetPlayer.Both; //add Player2 to the anger target type
+        }
+
         waitingBarFill.color = angryColor;
     }
     private void MakeCalm()
     {
         //handle making the customer calm again
-        isAngry = false;
+        angerTarget = AngerTargetPlayer.None;
         waitingBarFill.color = calmColor;
     }
 }
