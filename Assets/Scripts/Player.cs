@@ -36,6 +36,12 @@ public class Player : MonoBehaviour
 
     private GameManager gm;
 
+    //used for speed adjustment on pickups
+    private float normalSpeed;
+    private float fastSpeed;
+
+    private Coroutine speedPickupCoroutine;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -64,6 +70,10 @@ public class Player : MonoBehaviour
 
         //initialize score
         AdjustScore(0);
+
+        //set normal and fast speeds for pickups
+        normalSpeed = speed;
+        fastSpeed = normalSpeed + 0.05f;
     }
 
     //player movement method
@@ -255,6 +265,41 @@ public class Player : MonoBehaviour
     {
         score += adjustment;
         scoreText.text = score.ToString();
+    }
+
+    public void AddPickupTime()
+    {
+        //add 10 seconds to play time left and update the UI
+        timeLeft += 10;
+        timeText.text = timeLeft.ToString();
+    }
+
+    public void AddPickupSpeed()
+    {
+        //handle adding player speed for 30 seconds. only having 1 coroutine active at a time effectively caps the player speed, and restarts the time if a 2nd speed pickup is grabbed
+        if(speedPickupCoroutine != null)
+        {
+            StopCoroutine(speedPickupCoroutine);
+        }
+
+        speedPickupCoroutine = StartCoroutine(SpeedPickupRoutine());
+    }
+
+    private IEnumerator SpeedPickupRoutine()
+    {
+        //give player a speed boost for 30 seconds then set back to normal speed
+        speed = fastSpeed;
+
+        float timer = 0f;
+        float totalTime = 30f;
+
+        while(timer < totalTime)
+        {
+            timer += Time.deltaTime;
+            yield return null;
+        }
+
+        speed = normalSpeed;
     }
 
     private IEnumerator Countdown()

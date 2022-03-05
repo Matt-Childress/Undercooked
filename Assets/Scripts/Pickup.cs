@@ -27,13 +27,13 @@ public class Pickup : MonoBehaviour
         switch(type)
         {
             case PickupType.Speed:
-
+                p.AddPickupSpeed();
                 break;
             case PickupType.Time:
-
+                p.AddPickupTime();
                 break;
             default: //PickupType.Score
-
+                p.AdjustScore(10);
                 break;
         }
 
